@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"(no tests yet)\"",
-    "lint": "echo \"(no packages yet)\""
+    "test": " echo \"(root tests TODO)\"",
+    "lint": " npm run lint -w apps/backend"
   },
   "keywords": [],
   "author": "",
