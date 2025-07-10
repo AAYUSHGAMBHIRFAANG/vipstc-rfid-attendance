@@ -8,13 +8,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "directories": {
+    "doc": "docs"
+  },
+  "description": "",
   "private": "true",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "directories": {
-    "doc": "docs"
-  },
-  "description": ""
+  ]
 }
