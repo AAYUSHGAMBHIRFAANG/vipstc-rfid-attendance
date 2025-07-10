@@ -2,8 +2,8 @@
   "name": "backend",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"(backend tests TODO)\"",
-    "lint": "echo \"(backend lint TODO)\""
+    "db:seed": "ts-node --compiler-options '{\"module\":\"commonjs\"}' prisma/seed.ts",
+    "admin:create": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' scripts/create-admin.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,12 +12,18 @@
   "description": "",
   "devDependencies": {
     "@nestjs/cli": "^10.4.9",
-    "@types/node": "^24.0.12",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^24.0.13",
+    "@types/pdf-parse": "^1.1.5",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
+    "axios": "^1.10.0",
+    "bcrypt": "^6.0.0",
+    "pdf-parse": "^1.1.1",
     "prisma": "^6.11.1"
   }
 }
