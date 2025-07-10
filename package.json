@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": " echo \"(root tests TODO)\"",
-    "lint": " npm run lint -w apps/backend"
+    "dev": "npm --workspace apps/backend run start:dev",
+  "test": "npm --workspace apps/backend run test",
+  "lint": "npm --workspace apps/backend run lint",
+  "build": "npm --workspace apps/backend run build"
   },
   "keywords": [],
   "author": "",
