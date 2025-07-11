@@ -264,3 +264,5 @@
 [2025-07-11T20:10:00.664Z] 200 GET /api/docs/swagger-ui-standalone-preset.js 5.102 ms
 [2025-07-11T20:10:00.667Z] 200 GET /api/docs/swagger-ui-bundle.js 3.988 ms
 [2025-07-11T20:10:00.901Z] 200 GET /api/docs/favicon-32x32.png 1.202 ms
+[2025-07-11T20:17:53.221Z] 200 GET /api/health 6.088 ms
+[2025-07-11T20:18:27.120Z] 401 POST /api/auth/login 101.187 ms
