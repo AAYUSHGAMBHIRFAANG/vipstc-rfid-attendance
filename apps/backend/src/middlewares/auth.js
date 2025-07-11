@@ -16,11 +16,10 @@ export function verifyJWT(req, res, next) {
 /** ROLE HIERARCHY  (ADMIN > PCOORD > TEACHER > DEVICE) */
 const hierarchy = ['DEVICE', 'TEACHER', 'PCOORD', 'ADMIN'];
 
-export const requireRole =
-  (minRole) =>
-  (req, res, next) => {
-    const uRole = req.user?.role;
-    if (!uRole) return res.sendStatus(401);
-    if (hierarchy.indexOf(uRole) >= hierarchy.indexOf(minRole)) return next();
-    return res.sendStatus(403);
+export function requireRole(...allowedRoles) {
+  return (req, res, next) => {
+    const { role } = req.user;
+    if (!allowedRoles.includes(role)) return res.sendStatus(401);
+    next();
   };
+}

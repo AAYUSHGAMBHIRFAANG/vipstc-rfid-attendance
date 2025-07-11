@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config({ path: './.env' });     // ← run this first
+
 import jwt from 'jsonwebtoken';
 
 const ACCESS_EXP = process.env.JWT_EXP || '15m';
@@ -13,7 +16,7 @@ export const signAccess = (payload) =>
 export const signRefresh = (payload) =>
   jwt.sign(payload, SECRET, { expiresIn: REFRESH_EXP });
 
-export const verifyToken = (token) => jwt.verify(token, SECRET);
+export const verifyToken = (token) => jwt.verify(token, SECRET);   
 
 /** ------------------------------------------------------------------
  *  Convenience creators

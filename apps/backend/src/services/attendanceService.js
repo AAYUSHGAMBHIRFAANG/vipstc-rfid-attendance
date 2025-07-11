@@ -1,6 +1,7 @@
 // apps/backend/src/services/attendanceService.js
 import { prisma } from './prisma.js';
 import { broadcast } from '../websocket.js';
+import createError from 'http-errors';
 
 /**
  * Upsert a single attendance log and broadcast the new entry.
@@ -58,15 +59,60 @@ export async function broadcastSnapshot(sessionId) {
   );
 
   // Build array
-  const snapshot = await Promise.all(
-    studentList.map(async (s) => ({
-      studentId: s.id,
-      name: s.name,
-      enrol: s.enrollmentNo,
-      status: presentMap[s.id] ? 'PRESENT' : 'ABSENT',
-      time: presentMap[s.id] || null
-    }))
-  );
+  const snapshot = studentList.map((s) => ({
+    studentId: s.id,
+    name: s.name,
+    enrol: s.enrollmentNo,
+    status: presentMap[s.id] ? 'PRESENT' : 'ABSENT',
+    time: presentMap[s.id] || null
+  }));
 
-  broadcast(sessionId, 'attendance:snapshot', snapshot);
+  broadcast(sid, 'attendance:snapshot', snapshot);
+}
+
+/**
+ * Override an existing attendance log’s status (manual correction)
+ * and broadcast a manual-update event.
+ *
+ * @param {number|string} logId
+ * @param {'PRESENT'|'ABSENT'} newStatus
+ */
+export async function overrideLog(logId, newStatus) {
+  const id = Number(logId);
+  if (isNaN(id)) {
+    throw new Error('Invalid log ID');
+  }
+  if (!['PRESENT', 'ABSENT'].includes(newStatus)) {
+    throw new Error('Invalid status for override');
+  }
+
+  const now = new Date();
+  let log;
+  try {
+    log = await prisma.attendanceLog.update({
+      where: { id },
+      data: {
+        status:       newStatus,
+        manualOverride: true,
+        timestamp:    now
+      }
+    });
+  } catch (err) {
+    // Prisma “record not found” error
+    if (err.code === 'P2025') {
+      throw createError(404, `Attendance log #${id} not found`);
+    }
+    throw err;
+  }
+
+  // Broadcast the manual change
+  broadcast(log.sessionId, 'attendance:manual', {
+    logId:     log.id,
+    studentId: log.studentId,
+    status:    log.status,
+    time:      now.getTime(),
+    manual:    true
+  });
+
+  return log;
 }
