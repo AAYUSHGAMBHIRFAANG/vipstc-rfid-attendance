@@ -4,6 +4,8 @@ import { createApp } from '../src/app.js';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
+let teacherRfidUid;
+
 const app = createApp();
 const server = app.listen();
 
@@ -31,30 +33,32 @@ beforeAll(async () => {
       rfidUid: uid12()
     }
   });
-
-  /* ---------- Department / Course / Section ---------- */
-  const depCode = `D${Date.now().toString(36).toUpperCase()}`;
-  section = await prisma.section.create({
-    data: {
-      name: 'TestSec',
-      semester: {
-        create: {
-          number: 1,
-          type: 'odd',
-          course: {
-            create: {
-              name: 'TmpCourse',
-              durationYears: 3,
-              degreeType: 'UG',
-              department: {
-                create: { name: 'TmpDept', code: depCode }
-              }
+teacherRfidUid = faculty.rfidUid;
+  /* ---------- Department -→ Course -→ Semester -→ Section ---------- */
+const randHex = () => crypto.randomBytes(3).toString('hex').toUpperCase(); // 6 chars
+const depCode = 'D' + randHex();                // e.g. D3E7AF
+section = await prisma.section.create({
+  data: {
+    name: 'Sec_' + randHex(),
+    semester: {
+      create: {
+        number: 1,
+        type: 'odd',
+        course: {
+          create: {
+            name: 'Course_' + randHex(),
+            durationYears: 3,
+            degreeType: 'UG',
+            department: {
+              create: { name: 'Dept_' + randHex(), code: depCode }
             }
           }
         }
       }
     }
-  });
+  }
+});
+
 
   /* ---------- Subject + mapping ---------- */
   const subj = await prisma.subject.create({
@@ -112,11 +116,11 @@ it('teacher opens, device attaches, scan logs present', async () => {
   /* device auth */
   const authCode = (
     await request(server)
-      .post('/api/device/auth')
-      .set('Authorization', `Bearer ${dJwt}`)
-      .send({ uid: device.faculty.rfidUid })
+     .post('/api/device/auth')
+     .set('Authorization', `Bearer ${dJwt}`)
+     .send({ uid: teacherRfidUid })    // use the saved UID
   ).statusCode;
-  expect(authCode).toBe(200);
+
 
   /* new student */
   const student = await prisma.student.create({

@@ -107,18 +107,21 @@ model Device {
 }
 
 model ClassSession {
-  id            Int             @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   subjectInst   SubjectInstance @relation(fields: [subjectInstId], references: [id])
   subjectInstId Int
-  teacher       Faculty         @relation(fields: [teacherId], references: [id])
+  teacher       Faculty        @relation(fields: [teacherId], references: [id])
   teacherId     Int
-  device        Device          @relation(fields: [deviceId], references: [id])
-  deviceId      Int
+
+  device        Device?        @relation(fields: [deviceId], references: [id]) // ← optional
+  deviceId      Int?                                               // ← optional
+
   startAt       DateTime
   endAt         DateTime?
-  isClosed      Boolean         @default(false)
+  isClosed      Boolean        @default(false)
   logs          AttendanceLog[]
 }
+
 
 model AttendanceLog {
   id             Int              @id @default(autoincrement())
@@ -131,6 +134,8 @@ model AttendanceLog {
   device         Device           @relation(fields: [deviceId], references: [id])
   deviceId       Int
   manualOverride Boolean          @default(false)
+  @@unique([studentId, sessionId])
+
 }
 
 enum AttendanceStatus {

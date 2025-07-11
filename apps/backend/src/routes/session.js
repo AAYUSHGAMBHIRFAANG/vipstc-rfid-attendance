@@ -15,10 +15,10 @@ sessionRouter.post(
     const { sectionId } = req.body || {};
     if (!sectionId) return res.sendStatus(400);
         // req.user.sub = userId  ➜  find the matching faculty row
-    const faculty = await prisma.faculty.findUnique({
-      where: { userId: req.user.sub },
-      select: { id: true }
-    });
+      const faculty = await prisma.faculty.findFirst({
+    where: { userId: req.user.sub },
+    select: { id: true }
+  });
     if (!faculty) return res.status(400).json({ message: 'No faculty profile' });
 
     const session = await sessionSvc.openSession(faculty.id, sectionId);

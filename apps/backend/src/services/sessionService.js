@@ -1,18 +1,23 @@
 import { prisma } from './prisma.js';
 import createError from 'http-errors';
 
-export async function openSession(facultyId, sectionId) {  
-    const subjInst = await prisma.subjectInstance.findFirst({
+export async function openSession(facultyId, sectionId) {
+  // Find the SubjectInstance that links this faculty to that section
+  const subjInst = await prisma.subjectInstance.findFirst({
     where: { facultyId, sectionId }
   });
-  if (!subjInst) throw createError(400, 'No subject mapping for this teacher & section');
+  if (!subjInst) {
+    throw createError(400, 'No subject mapping for this teacher & section');
+  }
+
+  // Create the class session, connecting only the relations we actually have
   return prisma.classSession.create({
     data: {
-      teacherId: facultyId,
-      sectionId,
-      subjectInstId: subjInst.id,
-      startAt: new Date(),
-      isClosed: false
+      teacher:     { connect: { id: facultyId } },
+      subjectInst: { connect: { id: subjInst.id } },
+      startAt:      new Date(),
+      isClosed:     false
+      // deviceId remains null until /device/auth is called
     }
   });
 }
@@ -35,18 +40,26 @@ export async function closeSession(sessionId) {
   });
 
   // Mark ABSENT for students not scanned
-  await prisma.$executeRawUnsafe(
+ await prisma.$executeRawUnsafe(
     `
-    INSERT INTO "AttendanceLog"(studentId, "sessionId", status, timestamp, "deviceId")
-    SELECT s.id, $1, 'ABSENT', NOW(), $2
+    INSERT INTO "AttendanceLog"(
+      "studentId","sessionId","status","timestamp","deviceId"
+    )
+    SELECT
+      s.id,
+      $1,
+      'ABSENT',
+      NOW(),
+      $2
     FROM "Student" s
     WHERE s."sectionId" = $3
       AND NOT EXISTS (
-        SELECT 1 FROM "AttendanceLog"
-        WHERE "sessionId" = $1 AND "studentId" = s.id
-      );`,
+        SELECT 1 FROM "AttendanceLog" al
+        WHERE al."sessionId" = $1 AND al."studentId" = s.id
+      );
+    `,
     sessionId,
-    session.deviceId || null,
+    session.deviceId ?? null,
     session.sectionId
   );
 

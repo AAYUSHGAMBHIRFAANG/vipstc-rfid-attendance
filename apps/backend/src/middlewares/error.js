@@ -14,6 +14,7 @@ export const asyncWrap =
 // eslint-disable-next-line no-unused-vars
 export function errorHandler(err, req, res, next) {
   // Convert unknown errors
+  console.error('💥', err);
   const e = createError.isHttpError(err) ? err : createError(500, err.message);
   if (process.env.NODE_ENV !== 'test') {
     console.error(e); // eslint-disable-line no-console
