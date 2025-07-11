@@ -1,0 +1,6 @@
+[2025-07-11T16:51:20.130Z] 304 GET /api/health 1.134 ms
+[2025-07-11T16:51:35.432Z] 404 GET /api/does-not-exist 0.907 ms
+[2025-07-11T16:51:55.649Z] 404 GET /api/does-not-exist 6.782 ms
+[2025-07-11T17:25:35.755Z] 200 POST /api/auth/login 141.667 ms
+[2025-07-11T17:25:35.821Z] 200 POST /api/auth/login 57.937 ms
+[2025-07-11T17:25:35.828Z] 200 POST /api/auth/refresh 3.007 ms

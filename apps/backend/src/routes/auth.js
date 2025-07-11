@@ -1,21 +1,43 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-
 import { prisma } from '../services/prisma.js';
+import { makeUserTokens, verifyToken, signAccess } from '../utils/jwt.js';
+import { asyncWrap } from '../middlewares/error.js';
 
 export const authRouter = Router();
 
-authRouter.post('/login', async (req, res) => {
-  const { email, password } = req.body || {};
-  if (!email || !password) return res.status(400).json({ message: 'bad body' });
+/* ---------- POST /api/auth/login ---------- */
+authRouter.post(
+  '/login',
+  asyncWrap(async (req, res) => {
+    const { email, password } = req.body || {};
+    if (!email || !password) return res.sendStatus(400);
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return res.status(401).json({ message: 'bad credentials' });
-  const ok = await bcrypt.compare(password, user.passwordHash);
-  if (!ok) return res.status(401).json({ message: 'bad credentials' });
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return res.sendStatus(401);
 
-  const payload = { sub: user.id, role: user.role };
-  const access = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '15m' });
-  res.json({ access });
-});
+    const ok = await bcrypt.compare(password, user.passwordHash);
+    if (!ok) return res.sendStatus(401);
+
+    return res.json(makeUserTokens(user));
+  })
+);
+
+/* ---------- POST /api/auth/refresh ---------- */
+authRouter.post(
+  '/refresh',
+  asyncWrap(async (req, res) => {
+    const { refresh } = req.body || {};
+    if (!refresh) return res.sendStatus(400);
+
+    let payload;
+    try {
+      payload = verifyToken(refresh);
+    } catch {
+      return res.sendStatus(401);
+    }
+    // Optional: check token rotation jti here
+    const access = signAccess({ sub: payload.sub, role: payload.role });
+    return res.json({ access });
+  })
+);
