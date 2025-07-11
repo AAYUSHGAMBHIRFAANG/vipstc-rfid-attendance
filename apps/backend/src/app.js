@@ -96,8 +96,9 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 // Kick off cron jobs
-scheduleAutoClose();
-
+if (process.env.NODE_ENV !== 'test') {
+  scheduleAutoClose();
+ }
 // Export factory for tests
 export function createApp() {
   return app;
