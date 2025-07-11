@@ -1,15 +1,20 @@
 module.exports = {
   root: true,
-  env: { es2022: true, node: true },
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'import'],
-  extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:import/recommended',
-    'prettier'
-  ],
+  env: { es2024: true, node: true },
+  parserOptions: {
+    ecmaVersion: 2022,        // understands optional-chaining, catch-binding, etc.
+    sourceType: 'module'
+  },
+  plugins: ['node', 'import'],
+  extends: ['plugin:node/recommended', 'prettier'],
+  settings: {
+    node: { version: '>=20.0.0' }
+  },
   rules: {
-    'import/order': ['error', { 'newlines-between': 'always' }]
+    // style
+    'import/order': ['error', { 'newlines-between': 'always' }],
+    // turn off old-node restrictions
+    'node/no-unsupported-features/node-builtins': 'off',
+    'node/no-unsupported-features/es-syntax': 'off'
   }
 };
