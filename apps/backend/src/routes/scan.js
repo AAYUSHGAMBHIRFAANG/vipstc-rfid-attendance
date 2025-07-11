@@ -5,6 +5,7 @@ import { asyncWrap } from '../middlewares/error.js';
 import { isHexUid } from '../utils/validators.js';
 import { verifyToken } from '../utils/jwt.js';
 import { broadcast } from '../websocket.js';
+import { recordScan, broadcastSnapshot } from '../services/attendanceService.js';
 
 export const scanRouter = Router();
 
@@ -23,26 +24,7 @@ scanRouter.post(
     const student = await prisma.student.findUnique({ where: { rfidUid: uid } });
     if (!student) return res.sendStatus(404);
 
-    await prisma.attendanceLog.upsert({
-      where: {
-        studentId_sessionId: { studentId: student.id, sessionId }
-      },
-      update: { status: 'PRESENT', timestamp: new Date(), deviceId },
-      create: {
-        studentId: student.id,
-        sessionId,
-        status: 'PRESENT',
-        timestamp: new Date(),
-        deviceId
-      }
-    });
-
-    broadcast(sessionId, 'attendance:add', {
-      studentId: student.id,
-      name: student.name,
-      enrol: student.enrollmentNo,
-      time: Date.now()
-    });
+    await recordScan({ sessionId, studentId: student.id, deviceId });
 
     res.sendStatus(204);
   })

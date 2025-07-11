@@ -3,7 +3,7 @@ import { prisma } from '../services/prisma.js';
 import { verifyJWT, requireRole } from '../middlewares/auth.js';
 import { asyncWrap } from '../middlewares/error.js';
 import * as sessionSvc from '../services/sessionService.js';
-
+import { broadcastSnapshot } from '../services/attendanceService.js';
 export const sessionRouter = Router();
 
 /* ---- POST /api/session/open ------------------------------------------ */
@@ -24,6 +24,7 @@ sessionRouter.post(
     const session = await sessionSvc.openSession(faculty.id, sectionId);
 
     res.status(201).json({ sessionId: session.id });
+    await broadcastSnapshot(session.id);
   })
 );
 
@@ -34,6 +35,7 @@ sessionRouter.patch(
   asyncWrap(async (req, res) => {
     const sessionId = Number(req.params.id);
     const closed = await sessionSvc.closeSession(sessionId);
+    await broadcastSnapshot(sessionId);
     res.json({ ok: true, endAt: closed.endAt });
   })
 );

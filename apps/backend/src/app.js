@@ -29,9 +29,20 @@ app.use('/api/session', sessionRouter);
 app.use('/api/scan', scanRouter);
 
 app.use(errorHandler); 
-const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, () => console.log(`API 🚀  on :${PORT}`));
-initWebSocket(server);
+// Monkey-patch app.listen to always init WebSocket
+const originalListen = app.listen.bind(app);
+app.listen = (...args) => {
+  const server = originalListen(...args);
+  initWebSocket(server);
+  return server;
+};
+
+// Only start the server when run directly (not when imported by tests)
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`API 🚀  on :${PORT}`));
+}
+
 export function createApp() {
   return app;
 }
