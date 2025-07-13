@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext.jsx';
-// import background from '../assets/background.jpeg';
 import '../index.css';
 
 export default function Login() {
@@ -22,15 +21,7 @@ export default function Login() {
   };
 
   return (
-    <div
-      className="login-page"
-      style={{
-        backgroundImage: `url(${background})`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
+    <div className="login-page">
       <form className="login-card" onSubmit={handleSubmit}>
         <h2>LOGIN</h2>
         {error && (
