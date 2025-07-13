@@ -21,7 +21,7 @@ header.banner .title {
 }
 
 /* set full screen background, but keep header above */
-.login‐page {
+.login-page {
   position: absolute;
   top: 0;
   left: 0;
@@ -44,7 +44,7 @@ header.banner {
 }
 
 /* Form card */
-.login‐card {
+.login-card {
   background: rgba(255,255,255,0.8);
   padding: 2rem;
   border-radius: 12px;
@@ -54,14 +54,14 @@ header.banner {
 }
 
 /* Headline */
-.login‐card h2 {
+.login-card h2 {
   margin-bottom: 1.5rem;
   color: #333;
   letter-spacing: 1px;
 }
 
 /* Inputs */
-.login‐card input {
+.login-card input {
   width: 100%;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
@@ -73,7 +73,7 @@ header.banner {
 }
 
 /* Button */
-.login‐card button {
+.login-card button {
   background: #b71c1c;
   color: white;
   border: none;
@@ -83,18 +83,18 @@ header.banner {
   cursor: pointer;
   transition: background 0.2s;
 }
-.login‐card button:hover {
+.login-card button:hover {
   background: #7f0000;
 }
 
 /* Forgot link */
-.login‐card .forgot {
+.login-card .forgot {
   display: block;
   margin-top: 0.75rem;
   font-size: 0.875rem;
   color: #555;
   text-decoration: none;
 }
-.login‐card .forgot:hover {
+.login-card .forgot:hover {
   text-decoration: underline;
 }
