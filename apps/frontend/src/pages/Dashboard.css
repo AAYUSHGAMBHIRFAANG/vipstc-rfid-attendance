@@ -1,0 +1,85 @@
+/* apps/frontend/src/pages/Dashboard.css */
+
+.dashboard-container {
+  padding: 2rem;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  font-size: 1.8rem;
+  color: #b71c1c;
+}
+
+.logout-btn {
+  background: #aaa;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.logout-btn:hover {
+  background: #888;
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.section-card {
+  background: #fcebea;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.1s;
+}
+.section-card:hover {
+  transform: translateY(-4px);
+}
+
+.section-card h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.section-card .code {
+  font-size: 1rem;
+  color: #7f1d1d;
+  margin-bottom: 1rem;
+}
+
+.section-card .actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.section-card .actions button {
+  flex: 1;
+  background: #b71c1c;
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.section-card .actions button:hover {
+  background: #7f0000;
+}
+
+/* Loading & error */
+.center {
+  text-align: center;
+  margin-top: 4rem;
+  color: #555;
+}
+.error {
+  color: #c53030;
+}
