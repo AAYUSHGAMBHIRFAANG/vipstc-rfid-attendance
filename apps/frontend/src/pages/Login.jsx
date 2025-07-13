@@ -9,11 +9,14 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const API_URL = import.meta.env.VITE_API_URL || '';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('/api/auth/login', { email, password });
+      const url = `${API_URL}/api/auth/login`;
+      const res = await axios.post(url, { email, password });
       login(res.data.access);
     } catch (err) {
       setError('Invalid email or password');
