@@ -13,6 +13,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      
       <Route
         path="/*"
         element={
@@ -23,5 +24,6 @@ export default function AppRoutes() {
       />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
+    
   );
 }
