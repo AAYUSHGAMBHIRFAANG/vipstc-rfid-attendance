@@ -1,18 +1,14 @@
+// apps/frontend/src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';    // ← import this
+import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
+
+// ← This line was missing
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter>                                {/* ← wrap the entire tree */}
-      <App />
-    </BrowserRouter>
-    <ErrorBoundary>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ErrorBoundary>
-  </React.StrictMode>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
 );

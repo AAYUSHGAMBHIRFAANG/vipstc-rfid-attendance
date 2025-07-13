@@ -1,24 +1,19 @@
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import leftLogo from './assets/banner-left.webp'
+import rightLogo from './assets/banner-right.webp'
 
 export default function Layout({ children }) {
   return (
-    <div className="app-container">
-      <header className="app-header" style={{
-        background: 'var(--color-primary)',
-        color: '#fff',
-        padding: 'var(--spacing-lg)'
-      }}>
-        <h1>Teacher Dashboard</h1>
+    <>
+      <header className="banner">
+        <img src={leftLogo} alt="VIPS Logo" />
+        <div className="title">
+          Vivekananda Institute of Professional Studies – Technical Campus<br/>
+          Vivekananda School of Information Technology
+        </div>
+        <img src={rightLogo} alt="Campus Crest" />
       </header>
-      <main style={{ padding: 'var(--spacing-lg)' }}>{children}</main>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        pauseOnHover
-      />
-    </div>
+      <main>{children}</main>
+    </>
   );
 }

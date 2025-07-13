@@ -266,3 +266,5 @@
 [2025-07-11T20:10:00.901Z] 200 GET /api/docs/favicon-32x32.png 1.202 ms
 [2025-07-11T20:17:53.221Z] 200 GET /api/health 6.088 ms
 [2025-07-11T20:18:27.120Z] 401 POST /api/auth/login 101.187 ms
+[2025-07-12T15:47:23.249Z] 404 GET /api/auth/profile 4.018 ms
+[2025-07-12T15:47:23.252Z] 404 GET /api/auth/profile 0.536 ms
