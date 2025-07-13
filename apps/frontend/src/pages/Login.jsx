@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext.jsx';
-// import background from '../assets/background.jpeg';
 import '../index.css';
 
 export default function Login() {
@@ -10,11 +9,14 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const API_URL = import.meta.env.VITE_API_URL || '';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('/api/auth/login', { email, password });
+      const url = `${API_URL}/api/auth/login`;
+      const res = await axios.post(url, { email, password });
       login(res.data.access);
     } catch (err) {
       setError('Invalid email or password');
@@ -22,15 +24,7 @@ export default function Login() {
   };
 
   return (
-    <div
-      className="login-page"
-      style={{
-        backgroundImage: `url(${background})`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-      }}
-    >
+    <div className="login-page">
       <form className="login-card" onSubmit={handleSubmit}>
         <h2>LOGIN</h2>
         {error && (
