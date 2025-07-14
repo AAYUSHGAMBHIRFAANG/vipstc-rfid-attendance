@@ -14,15 +14,13 @@ export function initWebSocket(server) {
   if (wss) return wss;
   wss = new WebSocketServer({ noServer: true });
 
-  server.on('upgrade', (req, socket, head) => {
-    const url = new URL(req.url, 'http://localhost');
-    if (!url.pathname.startsWith('/ws/session/')) return socket.destroy();
-    wss.handleUpgrade(req, socket, head, (ws) => {
-      ws.sessionId = url.pathname.split('/').pop();
-      ws.isAlive = true;
-      wss.emit('connection', ws);
-    });
+  server.on('upgrade', (req,socket,head) => {
+  if (!req.url.startsWith('/ws/session/')) return socket.destroy();
+  wss.handleUpgrade(req, socket, head, (ws) => {
+    ws.sessionId = req.url.split('/').pop();
+    wss.emit('connection', ws);
   });
+});
 
   wss.on('connection', async (ws) => {
     ws.on('pong', () => (ws.isAlive = true));

@@ -37,13 +37,14 @@ import swaggerUi from 'swagger-ui-express';
 import fs        from 'fs';
 import path      from 'path';
 
-import { healthRouter }     from './routes/health.js';
-import { authRouter }       from './routes/auth.js';
-import { deviceRouter }     from './routes/device.js';
-import { sessionRouter }    from './routes/session.js';
-import { scanRouter }       from './routes/scan.js';
+import { authRouter    } from './routes/auth.js';
+import { deviceRouter  } from './routes/device.js';
+import { sessionRouter } from './routes/session.js';
+import { scanRouter    } from './routes/scan.js';
 import { attendanceRouter } from './routes/attendance.js';
-import { reportRouter }     from './routes/report.js';
+import { reportRouter  } from './routes/report.js';
+import { healthRouter  } from './routes/health.js';
+
 
 import { initWebSocket }    from './websocket.js';
 import { scheduleAutoClose } from './tasks/autoClose.js';
